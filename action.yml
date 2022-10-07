@@ -16,6 +16,9 @@ inputs:
     description: 'The unix file socket that the agent uses for communication with other processes'
     required: false
     default: '/tmp/ssh-auth.sock'
+  known-host-entry:
+    description: 'Line which to add in the known-hosts file.'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/main/index.js'
