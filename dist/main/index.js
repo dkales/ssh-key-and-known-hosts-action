@@ -1207,9 +1207,12 @@ async function run() {
 
     const name = "[" + host + "]:" + port;
 
-    const {code}       = await execa('ssh-keygen', ['-F', name])
-    if (code != 0)
+    try {
+    await execa('ssh-keygen', ['-F', name])
+    }
+    catch (error) 
     {
+      console.log(error)
       await fs.appendFileAsync(knownHostsFile, "\n" + known_hosts + "\n")
     }
     await fs.chmodAsync(knownHostsFile, '644')
