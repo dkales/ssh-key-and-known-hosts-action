@@ -20,7 +20,7 @@ inputs:
     description: 'Line which to add in the known-hosts file.'
     required: true
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/main/index.js'
   post: 'dist/cleanup/index.js'
 branding:

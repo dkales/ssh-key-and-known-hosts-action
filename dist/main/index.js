@@ -1177,11 +1177,10 @@ const fs = promise.promisifyAll(__webpack_require__(747))
 
 async function run() {
   try {
-    const privateKey  = core.getInput('ssh-private-key', { required: true })
-    const host        = core.getInput('ssh-host', { required: true })
-    const authSock    = core.getInput('ssh-socket')
-    const port        = core.getInput('ssh-port')
-    const known_hosts = core.getInput('known-host-entry', { required: true })
+    const privateKey = core.getInput('ssh-private-key', { required: true })
+    const host       = core.getInput('ssh-host', { required: true })
+    const authSock   = core.getInput('ssh-socket')
+    const port       = core.getInput('ssh-port')
 
     // Create the required directory
     const sshDir = process.env['HOME'] + '/.ssh'
@@ -1203,18 +1202,10 @@ async function run() {
     console.log('Adding host to known_hosts')
 
     // Add the host to the known_hosts file
+    const {stdout}       = await execa('ssh-keyscan', ['-p', port, host])
     const knownHostsFile = sshDir + '/known_hosts'
 
-    const name = "[" + host + "]:" + port;
-
-    try {
-    await execa('ssh-keygen', ['-F', name])
-    }
-    catch (error) 
-    {
-      console.log(error)
-      await fs.appendFileAsync(knownHostsFile, "\n" + known_hosts + "\n")
-    }
+    await fs.appendFileAsync(knownHostsFile, stdout)
     await fs.chmodAsync(knownHostsFile, '644')
   }
   catch (error) {
